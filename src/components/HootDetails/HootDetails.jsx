@@ -8,11 +8,18 @@ import { UserContext } from '../../contexts/UserContext';
 const HootDetails = (props) => {
   const [hoot, setHoot] = useState(null);
   const { hootId } = useParams();
-  const {user} = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
   const handleAddComment = async (commentFormData) => {
     const newComment = await hootService.createComment(hootId, commentFormData);
     setHoot({ ...hoot, comments: [...hoot.comments, newComment] });
+  };
+
+  const handleDeleteComment = async (commentId) => {
+    await hootService.deleteComment(hootId, commentId);
+    setHoot({ ...hoot,
+      comments: hoot.comments.filter((comment) => comment._id !== commentId),
+    });
   };
 
   useEffect(() => {
@@ -55,6 +62,15 @@ const HootDetails = (props) => {
                 {`${comment.author.username} posted on
                 ${new Date(comment.createdAt).toLocaleDateString()}`}
               </p>
+              {hoot.author._id === user._id && (
+                <>
+                  <Link to={`/hoots/${hootId}/comments/${comment._id}/edit`}>Edit Comment</Link>
+
+                  <button onClick={() => handleDeleteComment(comment._id)}>
+                    Delete Comment
+                  </button>
+                </>
+              )}
             </header>
             <p>{comment.text}</p>
           </article>
