@@ -3,6 +3,7 @@ import { useState, useEffect, useContext } from 'react';
 import * as hootService from '../../services/hootService';
 import CommentForm from '../CommentForm/CommentForm';
 import { UserContext } from '../../contexts/UserContext';
+import styles from './HootDetails.module.css';
 
 
 const HootDetails = (props) => {
@@ -17,7 +18,8 @@ const HootDetails = (props) => {
 
   const handleDeleteComment = async (commentId) => {
     await hootService.deleteComment(hootId, commentId);
-    setHoot({ ...hoot,
+    setHoot({
+      ...hoot,
       comments: hoot.comments.filter((comment) => comment._id !== commentId),
     });
   };
@@ -32,21 +34,23 @@ const HootDetails = (props) => {
 
   if (!hoot) return <main>Loading...</main>;
   return (
-    <main>
+    <main className={styles.container}>
       <section>
         <header>
           <p>{hoot.category.toUpperCase()}</p>
           <h2>{hoot.title}</h2>
-          <p>
-            {`${hoot.author.username} posted on
+          <div>
+            <p>
+              {`${hoot.author.username} posted on
             ${new Date(hoot.createdAt).toLocaleDateString()}`}
-          </p>
-          {hoot.author._id === user._id && (
-            <>
-              <Link to={`/hoots/${hootId}/edit`}>Edit</Link>
-              <button onClick={() => props.handleDeleteHoot(hootId)}>Delete</button>
-            </>
-          )}
+            </p>
+            {hoot.author._id === user._id && (
+              <>
+                <Link to={`/hoots/${hootId}/edit`}>Edit</Link>
+                <button onClick={() => props.handleDeleteHoot(hootId)}>Delete</button>
+              </>
+            )}
+          </div>
         </header>
         <p>{hoot.text}</p>
       </section>
@@ -58,19 +62,21 @@ const HootDetails = (props) => {
         {hoot.comments.map((comment) => (
           <article key={comment._id}>
             <header>
-              <p>
-                {`${comment.author.username} posted on
+              <div>
+                <p>
+                  {`${comment.author.username} posted on
                 ${new Date(comment.createdAt).toLocaleDateString()}`}
-              </p>
-              {hoot.author._id === user._id && (
-                <>
-                  <Link to={`/hoots/${hootId}/comments/${comment._id}/edit`}>Edit Comment</Link>
+                </p>
+                {hoot.author._id === user._id && (
+                  <>
+                    <Link to={`/hoots/${hootId}/comments/${comment._id}/edit`}>Edit Comment</Link>
 
-                  <button onClick={() => handleDeleteComment(comment._id)}>
-                    Delete Comment
-                  </button>
-                </>
-              )}
+                    <button onClick={() => handleDeleteComment(comment._id)}>
+                      Delete Comment
+                    </button>
+                  </>
+                )}
+              </div>
             </header>
             <p>{comment.text}</p>
           </article>
