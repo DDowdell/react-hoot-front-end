@@ -1,6 +1,9 @@
 import { useState } from 'react';
+import { useParams } from 'react-router';
 
 const HootForm = (props) => {
+  const {hootId} = useParams();
+  console.log(hootId);
   const [formData, setFormData] = useState({
     title: '',
     text: '',
@@ -18,6 +21,7 @@ const HootForm = (props) => {
 
   return (
     <main>
+      <h1>{hootId ? 'Edit Hoot' : 'New Hoot'}</h1>
       <form onSubmit={handleSubmit}>
         <label htmlFor='title-input'>Title:</label>
         <input

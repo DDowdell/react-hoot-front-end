@@ -49,8 +49,8 @@ const App = () => {
         {user ? (
           <>
             <Route path='/hoots' element={<HootList hoots={hoots} />} />
-            <Route path='/hoots/:hootId' element={<HootDetails />} />
             <Route path='/hoots/new' element={<HootForm handleAddHoot={handleAddHoot} />} />
+            <Route path='/hoots/:hootId/edit' element={<HootForm />} />
             <Route path='/hoots/:hootId' element={<HootDetails handleDeleteHoot={handleDeleteHoot} />} />
           </>
         ) : (

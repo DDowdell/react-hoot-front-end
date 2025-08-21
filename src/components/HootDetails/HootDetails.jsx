@@ -1,4 +1,4 @@
-import { useParams } from 'react-router';
+import { useParams, Link } from 'react-router';
 import { useState, useEffect, useContext } from 'react';
 import * as hootService from '../../services/hootService';
 import CommentForm from '../CommentForm/CommentForm';
@@ -6,9 +6,9 @@ import { UserContext } from '../../contexts/UserContext';
 
 
 const HootDetails = (props) => {
+  const [hoot, setHoot] = useState(null);
   const { hootId } = useParams();
   const {user} = useContext(UserContext);
-  const [hoot, setHoot] = useState(null);
 
   const handleAddComment = async (commentFormData) => {
     const newComment = await hootService.createComment(hootId, commentFormData);
@@ -36,6 +36,7 @@ const HootDetails = (props) => {
           </p>
           {hoot.author._id === user._id && (
             <>
+              <Link to={`/hoots/${hootId}/edit`}>Edit</Link>
               <button onClick={() => props.handleDeleteHoot(hootId)}>Delete</button>
             </>
           )}
